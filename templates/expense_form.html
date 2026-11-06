@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }} · Expense Tracker{% endblock %}
+{% block content %}
+<div class="form-page">
+  <a class="back-link" href="{{ url_for('dashboard') }}">← Back to dashboard</a>
+  <div class="panel mt-3">
+    <span class="eyebrow">{% if expense %}UPDATE TRANSACTION{% else %}NEW TRANSACTION{% endif %}</span>
+    <h1 class="h2 fw-bold mt-2">{{ page_title }}</h1>
+    <p class="text-secondary">Enter the details below. Fields marked required must be completed.</p>
+    <form method="post" class="mt-4">
+      <div class="row g-3">
+        <div class="col-md-7"><label for="title" class="form-label">Description *</label><input id="title" name="title" class="form-control" maxlength="120" required value="{{ request.form.get('title', expense.title if expense else '') }}" placeholder="e.g. Lunch with friends"></div>
+        <div class="col-md-5"><label for="amount" class="form-label">Amount (₹) *</label><input id="amount" name="amount" type="number" min="0.01" max="9999999999.99" step="0.01" class="form-control" required value="{{ request.form.get('amount', '%.2f'|format(expense.amount) if expense else '') }}" placeholder="0.00"></div>
+        <div class="col-md-6"><label for="category" class="form-label">Category *</label><select id="category" name="category" class="form-select" required><option value="">Choose a category</option>{% for category in categories %}<option value="{{ category }}" {% if request.form.get('category', expense.category if expense else '') == category %}selected{% endif %}>{{ category }}</option>{% endfor %}</select></div>
+        <div class="col-md-6"><label for="expense_date" class="form-label">Date *</label><input id="expense_date" name="expense_date" type="date" class="form-control" required value="{{ request.form.get('expense_date', expense.expense_date.isoformat() if expense else today) }}"></div>
+        <div class="col-12"><label for="notes" class="form-label">Notes (optional)</label><textarea id="notes" name="notes" class="form-control" rows="3" maxlength="500" placeholder="Add a note if useful">{{ request.form.get('notes', expense.notes if expense else '') }}</textarea></div>
+      </div>
+      <div class="d-flex gap-2 mt-4"><button class="btn btn-primary btn-lg" type="submit">{{ 'Save changes' if expense else 'Add expense' }}</button><a class="btn btn-outline-secondary btn-lg" href="{{ url_for('dashboard') }}">Cancel</a></div>
+    </form>
+  </div>
+</div>
+{% endblock %}

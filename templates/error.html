@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }} · Expense Tracker{% endblock %}
+{% block content %}
+<div class="empty-state panel">
+  <div class="display-4 fw-bold text-primary">{{ code }}</div>
+  <h1 class="h3 mt-3">Something needs attention</h1>
+  <p class="text-secondary">{{ message }}</p>
+  <a class="btn btn-primary" href="{{ url_for('index') }}">Go home</a>
+</div>
+{% endblock %}
